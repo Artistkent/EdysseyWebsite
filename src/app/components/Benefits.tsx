@@ -1,6 +1,6 @@
 // app/components/Benefits.tsx
 import { ReactNode } from "react";
-import { motion } from "framer-motion";
+
 
 interface BenefitCardProps {
   title: string;
