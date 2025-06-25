@@ -1,4 +1,5 @@
 'use client'
+import Navbar from './components/Navbar';
 import Hero from './components/Hero';
 import Benefits from './components/Benefits';
 import HowItWorks from './components/HowItWorks';
@@ -13,6 +14,8 @@ import { motion } from "motion/react"
 
 export default function Home() {
   return (
+<>
+    <Navbar />
     <main>
       <motion.div initial={{ opacity: 0, y: 40 }}
   whileInView={{ opacity: 1, y: 0 }}
@@ -95,5 +98,6 @@ export default function Home() {
        </motion.div>
 
     </main>
+    </>
   );
 }
