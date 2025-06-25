@@ -15,7 +15,7 @@ export default function Hero() {
   href="#WaitlistCTA"
   whileHover={{ scale: 1.05 }}
   whileTap={{ scale: 0.95 }} 
-  className="bg-secondary text-white font-semibold py-3 px-6 rounded-full hover:bg-yellow-300 transition">
+  className="bg-secondary text-white font-semibold py-3 px-6 rounded-full hover:bg-primary transition">
           Join the Waitlist for Early Access
         </motion.a>
         <motion.a
