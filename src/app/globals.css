@@ -4,13 +4,25 @@
   --background: #111827;
   --background2: #ffffff;
   --foreground: #ffffff;
+  --primary-color:#FFD700;
+  --primary-color2:#322b00;
+  --secondary-color: #111827 ;
+  --accent-color: #10B981;
+  --accent-color2:rgb(24, 247, 172);
 }
 
-@theme inline {
+@theme {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+   --color-primary: var(--primary-color);
+   --color-primary-500: var(--primary-color2);
+
+   --color-secondary: var(--secondary-color);
+  --color-accent: var(--accent-color);
+  --color-accent-500: var(--accent-color2);
+ 
 }
 
 @media (prefers-color-scheme: dark) {
@@ -19,6 +31,10 @@
     --foreground: #ededed;
   }
 }
+
+@theme {
+        
+      }
 
 html {
   scroll-behavior: smooth;
