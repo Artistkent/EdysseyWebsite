@@ -33,13 +33,13 @@ export default function Navbar() {
     <nav id='nav' className="sticky top-0 z-50 bg-white/10 backdrop-blur border-b border-white/20">
       <div className="max-w-6xl mx-auto px-6 py-4 flex justify-between items-center">
         {/* Brand */}
-        <a href="#" className="flex flex-col items-center font-bold bg-gradient-to-r from-[#e1b353] to-[#7b7e3a] bg-clip-text text-transparent tracking-wide text-xs md:text-sm drop-shadow-lg hover:drop-shadow-xl transition-transform duration-300 transform hover:scale-110">
+        <a href="#" className="flex flex-col items-center bg-gradient-to-r from-[#e1b353] to-[#7b7e3a] bg-clip-text text-transparent tracking-wide text-xs md:text-sm transition-transform duration-300 transform hover:scale-110 font-[cursive] font-extrabold">
              <Image
       src="/EdLogoEdit.png"
       width={50}
       height={10}
       alt="logo"
-      className='drop-shadow-lg hover:drop-shadow-xl transition-transform duration-300 transform hover:scale-110'
+      className='transition-transform duration-300 transform hover:scale-110'
     />
           Edyssey
          
