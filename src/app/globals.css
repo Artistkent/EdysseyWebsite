@@ -6,7 +6,9 @@
   --foreground: #ffffff;
   --primary-color:#FFD700;
   --primary-color2:#322b00;
+  
   --secondary-color: #111827 ;
+  --secondary-color2: #353535;
   --accent-color: #10B981;
   --accent-color2:rgb(24, 247, 172);
 }
@@ -16,10 +18,13 @@
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+
    --color-primary: var(--primary-color);
    --color-primary-500: var(--primary-color2);
 
    --color-secondary: var(--secondary-color);
+  --color-secondary-500: var(--secondary-color2);
+
   --color-accent: var(--accent-color);
   --color-accent-500: var(--accent-color2);
  

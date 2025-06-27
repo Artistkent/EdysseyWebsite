@@ -27,13 +27,15 @@ export default function Navbar() {
         {/* Desktop Links */}
         <div className="hidden md:flex gap-6 items-center">
           {navLinks.map((link) => (
+           
             <a
               key={link.href}
               href={link.href}
-              className="text-white/80 hover:text-white transition text-sm font-medium"
+              className="px-4 py-1.5 rounded-2xl bg-secondary hover:bg-secondary-500 text-white/80 hover:text-white transition text-sm font-medium"
             >
               {link.label}
             </a>
+           
           ))}
         </div>
 
