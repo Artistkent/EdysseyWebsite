@@ -31,12 +31,14 @@ export default function Navbar() {
 
   return (
     <nav id='nav' className="sticky top-0 z-50 bg-white/10 backdrop-blur border-b border-white/20">
-      <div className="max-w-6xl mx-auto px-6 py-4 flex justify-between items-center">
+      <div className="max-w-6xl mx-auto px-4 py-1 flex justify-between items-center">
         {/* Brand */}
-        <a href="#" className="flex flex-col items-center bg-gradient-to-r from-[#e1b353] to-[#7b7e3a] bg-clip-text text-transparent tracking-wide text-xs md:text-sm transition-transform duration-300 transform hover:scale-110 font-[cursive] font-extrabold">
+        <div className='flex items-center bg-secondary/90 aspect-square px-3.5  rounded-full'>
+        <a href="#" className="flex flex-col m-1 items-center bg-gradient-to-r from-[#e1b353] via-[#7b7e3a] to-[#e1b353] bg-clip-text text-transparent text-xs md:text-sm transition-transform duration-300 transform hover:scale-110 font-[cursive] font-extrabold">
+          
              <Image
       src="/EdLogoEdit.png"
-      width={50}
+      width={45}
       height={10}
       alt="logo"
       className='transition-transform duration-300 transform hover:scale-110'
@@ -44,6 +46,7 @@ export default function Navbar() {
           Edyssey
          
         </a>
+        </div>
 
         {/* Desktop Links */}
         <div className="hidden md:flex gap-6 items-center">
