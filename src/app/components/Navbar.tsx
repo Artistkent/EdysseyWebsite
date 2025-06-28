@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import Image from 'next/image'
 import { FaBars } from 'react-icons/fa';
 import { FaTimes } from 'react-icons/fa';
@@ -17,7 +17,11 @@ const navLinks = [
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [isDarkBg, setIsDarkBg] = useState(false);
 
+  
+
+// Handle scroll event to change navbar style
   useEffect(() => {
   const handleScroll = () => {
     const navbar = document.querySelector('nav');
@@ -29,33 +33,112 @@ export default function Navbar() {
   return () => window.removeEventListener('scroll', handleScroll);
 }, []);
 
+// Show a debug dot at the specified coordinates
+function showDebugDot(x: number, y: number) {
+  const dot = document.createElement('div');
+  dot.style.position = 'fixed';
+  dot.style.left = `${x - 4}px`; // Center the dot
+  dot.style.top = `${y - 4}px`;
+  dot.style.width = '8px';
+  dot.style.height = '8px';
+  dot.style.backgroundColor = 'red';
+  dot.style.borderRadius = '50%';
+  dot.style.zIndex = '9999';
+  dot.style.pointerEvents = 'none';
+  dot.style.boxShadow = '0 0 6px 2px rgba(255,0,0,0.6)';
+  dot.className = 'debug-dot';
+
+  document.body.appendChild(dot);
+
+  // Remove after 2 seconds
+  setTimeout(() => {
+    dot.remove();
+  }, 2000);
+}
+
+// Function to determine background brightness at a specific Y position
+
+const getBackgroundBehindNavbar = useCallback((navbarId = 'nav'): 'light' | 'dark' => {
+  const navbar = document.getElementById(navbarId);
+  if (!navbar) return 'light';
+
+  const navbarHeight = navbar?.clientHeight || 0;
+
+  const rect = navbar.getBoundingClientRect();
+  const y = rect.bottom - (navbarHeight/2); // Just below the navbar
+  console.log('Checking background at Y position:', y);
+  const x = 10;
+
+ // showDebugDot(x, y);
+
+  let elem = document.elementFromPoint(x, y);
+
+  // If the point returns the navbar itself (because it's sticky), we search deeper
+  while (elem && elem.classList.contains("navbarGroupClass")) {
+    (elem as HTMLElement).style.pointerEvents = 'none'; // Temporarily ignore the navbar
+    elem = document.elementFromPoint(x, y);
+    console.log('Found element at point:', elem);
+    (elem as HTMLElement | null)?.style.removeProperty('pointer-events');
+  }
+
+  if (!elem) return 'light';
+
+  const style = window.getComputedStyle(elem);
+  const bgColor = style.backgroundColor;
+  console.log('Background behind navbar:', bgColor);
+
+  if (!bgColor || bgColor === 'transparent') return 'light';
+
+  const rgb = bgColor.match(/\d+/g)?.map(Number);
+  if (!rgb || rgb.length < 3) return 'light';
+
+  const brightness = (rgb[0] * 299 + rgb[1] * 587 + rgb[2] * 114) / 1000;
+   console.log('Calculated brightness:', brightness);
+  return brightness > 151 ? 'light' : 'dark';
+}, []);
+
+
+// Check background brightness on scroll
+useEffect(() => {
+  const handleScroll = () => {
+    const brightness = getBackgroundBehindNavbar();
+    setIsDarkBg(brightness === 'dark');
+  };
+
+  window.addEventListener('scroll', handleScroll);
+  handleScroll(); // initial run
+  return () => window.removeEventListener('scroll', handleScroll);
+}, [getBackgroundBehindNavbar]);
+
+
+
   return (
-    <nav id='nav' className="sticky top-0 z-50 bg-white/10 backdrop-blur border-b border-white/20">
-      <div className="max-w-6xl mx-auto px-4 py-1 flex justify-between items-center">
+    <nav id='nav' className="navbarGroupClass sticky top-0 z-50 bg-white/10 backdrop-blur border-b border-white/20">
+      <div className="navbarGroupClass max-w-6xl mx-auto px-4 py-1 flex justify-between items-center">
         {/* Brand */}
-        <div className='flex items-center bg-secondary/90 aspect-square px-3.5  rounded-full'>
-        <a href="#" className="flex flex-col m-1 items-center bg-gradient-to-r from-[#e1b353] via-[#7b7e3a] to-[#e1b353] bg-clip-text text-transparent text-xs md:text-sm transition-transform duration-300 transform hover:scale-110 font-[cursive] font-extrabold">
+        <div className=' navbarGroupClass flex items-center px-3.5  rounded-full'>
+        <a href="#" className="navbarGroupClass flex flex-col m-1 items-center bg-gradient-to-r from-[#e1b353] via-[#7b7e3a] to-[#e1b353] bg-clip-text text-transparent text-xs transition-transform duration-300 transform hover:scale-110 font-[cursive] font-extrabold">
           
              <Image
       src="/EdLogoEdit.png"
-      width={45}
+      width={40}
       height={10}
       alt="logo"
-      className='transition-transform duration-300 transform hover:scale-110'
+      className='navbarGroupClass transition-transform duration-300 transform hover:scale-110'
     />
-          Edyssey
          
         </a>
         </div>
 
         {/* Desktop Links */}
-        <div className="hidden md:flex gap-6 items-center">
+        <div className="navbarGroupClass hidden md:flex gap-6 items-center cursor-pointer">
           {navLinks.map((link) => (
            
             <a
               key={link.href}
               href={link.href}
-              className={`px-4 py-1.5 rounded-2xl hover:text-white transition-colors duration-500 transform text-sm font-bold  ${scrolled ? 'bg-primary text-black hover:bg-primary/70' : 'bg-secondary hover:bg-secondary-500 text-white hover:text-white/80'}`}
+              className={`navbarGroupClass px-4 py-1.5 rounded-2xl hover:text-white transition-colors duration-300 transform text-sm font-bold  ${scrolled ? '' : ''}
+              ${isDarkBg ? 'text-white' : 'text-black'}`}
             >
               {link.label}
             </a>
@@ -66,7 +149,7 @@ export default function Navbar() {
         {/* Mobile Hamburger */}
         <button
           onClick={() => setIsOpen(!isOpen)}
-          className="md:hidden text-white text-xl"
+          className="navbarGroupClass md:hidden text-white text-xl"
           aria-label="Toggle Menu"
         >
           {isOpen ? <FaTimes /> : <FaBars />}
@@ -80,14 +163,14 @@ export default function Navbar() {
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: 'auto' }}
             exit={{ opacity: 0, height: 0 }}
-            className="md:hidden px-6 pb-4 space-y-4 bg-white/10 backdrop-blur"
+            className="navbarGroupClass md:hidden px-6 pb-4 space-y-4 bg-white/10 backdrop-blur"
           >
             {navLinks.map((link) => (
               <a
                 key={link.href}
                 href={link.href}
                 onClick={() => setIsOpen(false)}
-                className="block text-white/80 hover:text-white transition text-sm font-medium"
+                className="navbarGroupClass block text-white/80 hover:text-white transition text-sm font-medium"
               >
                 {link.label}
               </a>
