@@ -75,10 +75,11 @@ const getBackgroundBehindNavbar = useCallback((navbarId = 'nav'): 'light' | 'dar
 
   // If the point returns the navbar itself (because it's sticky), we search deeper
   while (elem && elem.classList.contains("navbarGroupClass")) {
-    (elem as HTMLElement).style.pointerEvents = 'none'; // Temporarily ignore the navbar
+    const originalElem = elem as HTMLElement;
+    originalElem.style.pointerEvents = 'none';// Temporarily ignore the navbar
     elem = document.elementFromPoint(x, y);
     console.log('Found element at point:', elem);
-    (elem as HTMLElement | null)?.style.removeProperty('pointer-events');
+    originalElem.style.removeProperty('pointer-events');
   }
 
   if (!elem) return 'light';
@@ -137,8 +138,8 @@ useEffect(() => {
             <a
               key={link.href}
               href={link.href}
-              className={`navbarGroupClass px-4 py-1.5 rounded-2xl hover:text-white transition-colors duration-300 transform text-sm font-bold  ${scrolled ? '' : ''}
-              ${isDarkBg ? 'text-white' : 'text-black'}`}
+              className={`navbarGroupClass px-4 py-1.5 rounded-2xl transition-all duration-300 transform text-sm font-bold hover:scale-110  ${scrolled ? '' : ''}
+              ${isDarkBg ? 'text-white hover:text-white/70 ' : 'text-black hover:text-black/70'}`}
             >
               {link.label}
             </a>
