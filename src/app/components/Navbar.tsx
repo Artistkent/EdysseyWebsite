@@ -117,7 +117,7 @@ useEffect(() => {
     <nav id='nav' className="navbarGroupClass sticky top-0 z-50 bg-white/10 backdrop-blur border-b border-white/20">
       <div className="navbarGroupClass max-w-6xl mx-auto px-4 py-1 flex justify-between items-center">
         {/* Brand */}
-        <div className=' navbarGroupClass flex items-center px-3.5  rounded-full'>
+        <div className=' navbarGroupClass flex items-center  rounded-full'>
         <a href="#" className="navbarGroupClass flex flex-col m-1 items-center bg-gradient-to-r from-[#e1b353] via-[#7b7e3a] to-[#e1b353] bg-clip-text text-transparent text-xs transition-transform duration-300 transform hover:scale-110 font-[cursive] font-extrabold">
           
              <Image
@@ -153,7 +153,7 @@ useEffect(() => {
           className="navbarGroupClass md:hidden text-white text-xl"
           aria-label="Toggle Menu"
         >
-          {isOpen ? <FaTimes /> : <FaBars />}
+          {isOpen ? <FaTimes className={`navbarGroupClass ${isDarkBg ? 'text-white hover:text-white/70 ' : 'text-black hover:text-black/70'}`} /> : <FaBars className={`navbarGroupClass ${isDarkBg ? 'text-white hover:text-white/70 ' : 'text-black hover:text-black/70'}`} />}
         </button>
       </div>
 
@@ -164,14 +164,15 @@ useEffect(() => {
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: 'auto' }}
             exit={{ opacity: 0, height: 0 }}
-            className="navbarGroupClass md:hidden px-6 pb-4 space-y-4 bg-white/10 backdrop-blur"
+            className="navbarGroupClass md:hidden px-6 py-4 space-y-4 bg-white/10 backdrop-blur"
           >
             {navLinks.map((link) => (
               <a
                 key={link.href}
                 href={link.href}
                 onClick={() => setIsOpen(false)}
-                className="navbarGroupClass block text-white/80 hover:text-white transition text-sm font-medium"
+                className={`navbarGroupClass block  hover:text-white transition text-sm font-medium  hover:scale-101  ${scrolled ? '' : ''}
+              ${isDarkBg ? 'text-white hover:text-white/70 ' : 'text-black hover:text-black/70'}`}
               >
                 {link.label}
               </a>
