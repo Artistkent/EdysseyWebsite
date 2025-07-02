@@ -118,7 +118,7 @@ useEffect(() => {
       <div className="navbarGroupClass max-w-6xl mx-auto px-4 py-1 flex justify-between items-center">
         {/* Brand */}
         <div className=' navbarGroupClass flex items-center  rounded-full'>
-        <a href="#" className="navbarGroupClass flex flex-col m-1 items-center bg-gradient-to-r from-[#e1b353] via-[#7b7e3a] to-[#e1b353] bg-clip-text text-transparent text-xs transition-transform duration-300 transform hover:scale-110 font-[cursive] font-extrabold">
+        <a href="#" className="navbarGroupClass flex flex-row m-1 items-center bg-gradient-to-r from-[#e1b353] via-[#7b7e3a] to-[#e1b353] bg-clip-text text-transparent text-xs transition-transform duration-300 transform hover:scale-110 font-[cursive] font-extrabold">
           
              <Image
       src="/EdLogoEdit.png"
@@ -127,6 +127,8 @@ useEffect(() => {
       alt="logo"
       className='navbarGroupClass transition-transform duration-300 transform hover:scale-110'
     />
+
+    EDDYSEY
          
         </a>
         </div>
@@ -138,6 +140,7 @@ useEffect(() => {
             <a
               key={link.href}
               href={link.href}
+              id={link.href.slice(1)} // Remove the leading '#' for the ID
               className={`navbarGroupClass px-4 py-1.5 rounded-2xl transition-all duration-300 transform text-sm font-bold hover:scale-110  ${scrolled ? '' : ''}
               ${isDarkBg ? 'text-white hover:text-white/70 ' : 'text-black hover:text-black/70'}`}
             >
@@ -170,6 +173,7 @@ useEffect(() => {
               <a
                 key={link.href}
                 href={link.href}
+                
                 onClick={() => setIsOpen(false)}
                 className={`navbarGroupClass block  hover:text-white transition text-sm font-medium  hover:scale-101  ${scrolled ? '' : ''}
               ${isDarkBg ? 'text-white hover:text-white/70 ' : 'text-black hover:text-black/70'}`}
