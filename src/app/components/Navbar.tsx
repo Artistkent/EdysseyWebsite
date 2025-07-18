@@ -11,7 +11,7 @@ const navLinks = [
   { label: 'How It Works', href: '#how-it-works' },
   { label: 'Perks', href: '#perks' },
   { label: 'FAQ', href: '#faq' },
-  { label: 'Join Waitlist', href: '#waitlist' },
+  { label: 'Join Waitlist', href: '#WaitlistCTA' },
 ];
 
 export default function Navbar() {
@@ -34,27 +34,29 @@ export default function Navbar() {
 }, []);
 
 // Show a debug dot at the specified coordinates
-// function showDebugDot(x: number, y: number) {
-//   const dot = document.createElement('div');
-//   dot.style.position = 'fixed';
-//   dot.style.left = `${x - 4}px`; // Center the dot
-//   dot.style.top = `${y - 4}px`;
-//   dot.style.width = '8px';
-//   dot.style.height = '8px';
-//   dot.style.backgroundColor = 'red';
-//   dot.style.borderRadius = '50%';
-//   dot.style.zIndex = '9999';
-//   dot.style.pointerEvents = 'none';
-//   dot.style.boxShadow = '0 0 6px 2px rgba(255,0,0,0.6)';
-//   dot.className = 'debug-dot';
 
-//   document.body.appendChild(dot);
+function showDebugDot(x: number, y: number) {
+  const dot = document.createElement('div');
+  dot.style.position = 'fixed';
+  dot.style.left = `${x + 500}px`; // Center the dot
+  dot.style.top = `${y - 4}px`;
+  dot.style.width = '8px';
+  dot.style.height = '8px';
+  dot.style.backgroundColor = 'red';
+  dot.style.borderRadius = '50%';
+  dot.style.zIndex = '9999';
+  dot.style.pointerEvents = 'none';
+  dot.style.boxShadow = '0 0 6px 2px rgba(255,0,0,0.6)';
+  dot.className = 'debug-dot';
 
-//   // Remove after 2 seconds
-//   setTimeout(() => {
-//     dot.remove();
-//   }, 2000);
-// }
+  document.body.appendChild(dot);
+
+  // Remove after 2 seconds
+  setTimeout(() => {
+    dot.remove();
+  }, 2000);
+}
+
 
 // Function to determine background brightness at a specific Y position
 
@@ -69,16 +71,20 @@ const getBackgroundBehindNavbar = useCallback((navbarId = 'nav'): 'light' | 'dar
   console.log('Checking background at Y position:', y);
   const x = 10;
 
- // showDebugDot(x, y);
+ showDebugDot(x, y);
 
   let elem = document.elementFromPoint(x, y);
+  let elems = document.elementsFromPoint(x, y);
+  
 
   // If the point returns the navbar itself (because it's sticky), we search deeper
   while (elem && elem.classList.contains("navbarGroupClass")) {
     const originalElem = elem as HTMLElement;
     originalElem.style.pointerEvents = 'none';// Temporarily ignore the navbar
     elem = document.elementFromPoint(x, y);
+    elems = document.elementsFromPoint(x, y);
     console.log('Found element at point:', elem);
+    console.log('Elements at point:', elems);
     originalElem.style.removeProperty('pointer-events');
   }
 
@@ -86,7 +92,7 @@ const getBackgroundBehindNavbar = useCallback((navbarId = 'nav'): 'light' | 'dar
 
   const style = window.getComputedStyle(elem);
   const bgColor = style.backgroundColor;
-  // console.log('Background behind navbar:', bgColor);
+  console.log('Background behind navbar:', bgColor);
 
   if (!bgColor || bgColor === 'transparent') return 'light';
 
@@ -114,7 +120,7 @@ useEffect(() => {
 
 
   return (
-    <nav id='nav' className="navbarGroupClass sticky top-0 z-50 bg-white/10 backdrop-blur border-b border-white/20">
+    <nav id='nav' className="navbarGroupClass sticky top-0 z-50  backdrop-blur border-b border-white/20">
       <div className="navbarGroupClass max-w-6xl mx-auto px-4 py-1 flex justify-between items-center">
         {/* Brand */}
         <div className=' navbarGroupClass flex items-center  rounded-full'>
@@ -140,7 +146,7 @@ useEffect(() => {
             <a
               key={link.href}
               href={link.href}
-              id={link.href.slice(1)} // Remove the leading '#' for the ID
+              id={link.href.slice(1) + "navid"} // Append "navid" to the ID
               className={`navbarGroupClass px-4 py-1.5 rounded-2xl transition-all duration-300 transform text-sm font-bold hover:scale-110  ${scrolled ? '' : ''}
               ${isDarkBg ? 'text-white hover:text-white/70 ' : 'text-black hover:text-black/70'}`}
             >

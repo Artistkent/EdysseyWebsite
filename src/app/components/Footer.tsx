@@ -2,8 +2,12 @@
 import { FaDiscord, FaXTwitter, FaLinkedin } from "react-icons/fa6";
 
 export default function Footer() {
+
+  
+
   return (
-    <footer className="bg-indigo-950 text-white py-12 px-6">
+    <footer className="relative  border-t border-white/50 text-white ">
+      <div className=" z-50  py-12 pb-2 px-6">
       <div className="max-w-6xl mx-auto flex flex-col md:flex-row md:justify-between gap-8">
         {/* Left: Links */}
         <div>
@@ -36,6 +40,8 @@ export default function Footer() {
           </a>
         </div>
       </div>
+      </div>
     </footer>
   );
 }
+  

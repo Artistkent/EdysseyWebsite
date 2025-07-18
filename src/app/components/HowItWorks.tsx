@@ -29,7 +29,7 @@ const steps = [
 
 export default function HowItWorks() {
   return (
-    <section id="how-it-works" className="bg-white py-20 px-6">
+    <section id="about" className="bg-white py-20 px-6">
       <div className="max-w-5xl mx-auto">
         <h2 className="text-3xl md:text-4xl font-bold text-center mb-14 text-gray-900">
           How Edyssey Works (Even Before It Fully Launches)

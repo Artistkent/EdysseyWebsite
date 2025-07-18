@@ -19,7 +19,7 @@ export default function Hero() {
           Join the Waitlist for Early Access
         </motion.a>
         <motion.a
-  href="#how-it-works"
+  href="#about"
   whileHover={{ scale: 1.05 }}
   whileTap={{ scale: 0.95 }}  className="border border-white py-3 px-6 rounded-full hover:bg-white hover:text-black transition">
           See How It Works
