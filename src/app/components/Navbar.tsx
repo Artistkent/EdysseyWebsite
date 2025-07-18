@@ -86,7 +86,7 @@ const getBackgroundBehindNavbar = useCallback((navbarId = 'nav'): 'light' | 'dar
 
   const style = window.getComputedStyle(elem);
   const bgColor = style.backgroundColor;
-  console.log('Background behind navbar:', bgColor);
+  // console.log('Background behind navbar:', bgColor);
 
   if (!bgColor || bgColor === 'transparent') return 'light';
 
@@ -94,7 +94,7 @@ const getBackgroundBehindNavbar = useCallback((navbarId = 'nav'): 'light' | 'dar
   if (!rgb || rgb.length < 3) return 'light';
 
   const brightness = (rgb[0] * 299 + rgb[1] * 587 + rgb[2] * 114) / 1000;
-   console.log('Calculated brightness:', brightness);
+  //  console.log('Calculated brightness:', brightness);
   return brightness > 151 ? 'light' : 'dark';
 }, []);
 
