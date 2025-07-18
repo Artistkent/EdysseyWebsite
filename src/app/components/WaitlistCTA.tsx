@@ -40,8 +40,8 @@ export default function WaitlistCTA() {
 
 
   return (
-    <section id="WaitlistCTA" className="relative z-0 bg-gradient-to-br from-primary-500 to-primary text-white py-20 px-6 text-center pointer-events-none">
-      <div className="max-w-xl mx-auto pointer-events-none">
+    <section id="WaitlistCTA" className="lightChildParent relative z-0 bg-gradient-to-br from-primary-500 to-primary text-white py-20 px-6 text-center">
+      <div className="max-w-xl mx-auto">
         <h2 className="text-3xl md:text-4xl font-bold mb-6">
           Be among the first to shape the future of education.
         </h2>
@@ -60,13 +60,13 @@ initial={{ opacity: 0, y: 40 }}
   whileInView={{ opacity: 1, y: 0 }}
   transition={{ duration: 0.5, delay: 0.1 }}
   viewport={{ once: true }}
-  className="pointer-events-none"
+  className=""
 >
-  <div className="relative max-w-xl mx-auto bg-white text-gray-900 p-8 rounded-2xl shadow-md border border-gray-200 z-50 pointer-events-auto">
+  <div className="lightChild relative max-w-xl mx-auto bg-black text-white-900 p-8 rounded-2xl shadow-md border border-gray-500 z-50 ">
         <h2 className="text-xl font-semibold mb-2 text-center">
           Be among the first to experience our AI-powered learning platform.
         </h2>
-        <p className="text-sm text-gray-600 mb-6 text-center">
+        <p className="text-sm text-white-600 mb-6 text-center">
           Get early access to exclusive features and updates.
         </p>
 
@@ -125,13 +125,13 @@ initial={{ opacity: 0, y: 40 }}
           {/* Submit */}
           <button
             type="submit"
-            className="w-full bg-primary text-secondary font-semibold py-3 rounded-lg hover:bg-white hover:shadow-[inset_0_0_6px_var(--color-primary)] transition cursor-pointer"
+            className="w-full bg-primary text-secondary font-semibold py-3 rounded-lg hover:bg-transparent hover:text-white hover:shadow-[inset_0_0_6px_var(--color-primary)] transition cursor-pointer"
           >
             Join Waitlist
           </button>
 
           {/* Consent */}
-          <p className="text-xs text-center text-gray-500 mt-4">
+          <p className="text-xs text-center text-white-500 mt-4">
             By joining the waitlist, you agree to receive updates about Edyssey.
           </p>
         </form>

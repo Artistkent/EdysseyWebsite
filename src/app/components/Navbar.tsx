@@ -38,8 +38,8 @@ export default function Navbar() {
 function showDebugDot(x: number, y: number) {
   const dot = document.createElement('div');
   dot.style.position = 'fixed';
-  dot.style.left = `${x + 500}px`; // Center the dot
-  dot.style.top = `${y - 4}px`;
+  dot.style.left = `${x}px`; // Center the dot
+  dot.style.top = `${y}px`;
   dot.style.width = '8px';
   dot.style.height = '8px';
   dot.style.backgroundColor = 'red';
@@ -74,17 +74,13 @@ const getBackgroundBehindNavbar = useCallback((navbarId = 'nav'): 'light' | 'dar
  showDebugDot(x, y);
 
   let elem = document.elementFromPoint(x, y);
-  let elems = document.elementsFromPoint(x, y);
-  
 
   // If the point returns the navbar itself (because it's sticky), we search deeper
   while (elem && elem.classList.contains("navbarGroupClass")) {
     const originalElem = elem as HTMLElement;
     originalElem.style.pointerEvents = 'none';// Temporarily ignore the navbar
     elem = document.elementFromPoint(x, y);
-    elems = document.elementsFromPoint(x, y);
     console.log('Found element at point:', elem);
-    console.log('Elements at point:', elems);
     originalElem.style.removeProperty('pointer-events');
   }
 
@@ -147,7 +143,7 @@ useEffect(() => {
               key={link.href}
               href={link.href}
               id={link.href.slice(1) + "navid"} // Append "navid" to the ID
-              className={`navbarGroupClass px-4 py-1.5 rounded-2xl transition-all duration-300 transform text-sm font-bold hover:scale-110  ${scrolled ? '' : ''}
+              className={`navbarGroupClass px-4 py-1.5 rounded-2xl transition-all duration-300 transform text-sm font-medium hover:scale-110  ${scrolled ? '' : ''}
               ${isDarkBg ? 'text-white hover:text-white/70 ' : 'text-black hover:text-black/70'}`}
             >
               {link.label}
@@ -181,7 +177,7 @@ useEffect(() => {
                 href={link.href}
                 
                 onClick={() => setIsOpen(false)}
-                className={`navbarGroupClass block  hover:text-white transition text-sm font-medium  hover:scale-101  ${scrolled ? '' : ''}
+                className={`navbarGroupClass block  hover:text-white transition text-sm font  hover:scale-101  ${scrolled ? '' : ''}
               ${isDarkBg ? 'text-white hover:text-white/70 ' : 'text-black hover:text-black/70'}`}
               >
                 {link.label}
