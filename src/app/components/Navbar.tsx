@@ -35,27 +35,27 @@ export default function Navbar() {
 
 // Show a debug dot at the specified coordinates
 
-function showDebugDot(x: number, y: number) {
-  const dot = document.createElement('div');
-  dot.style.position = 'fixed';
-  dot.style.left = `${x}px`; // Center the dot
-  dot.style.top = `${y}px`;
-  dot.style.width = '8px';
-  dot.style.height = '8px';
-  dot.style.backgroundColor = 'red';
-  dot.style.borderRadius = '50%';
-  dot.style.zIndex = '9999';
-  dot.style.pointerEvents = 'none';
-  dot.style.boxShadow = '0 0 6px 2px rgba(255,0,0,0.6)';
-  dot.className = 'debug-dot';
+// function showDebugDot(x: number, y: number) {
+//   const dot = document.createElement('div');
+//   dot.style.position = 'fixed';
+//   dot.style.left = `${x}px`; // Center the dot
+//   dot.style.top = `${y}px`;
+//   dot.style.width = '8px';
+//   dot.style.height = '8px';
+//   dot.style.backgroundColor = 'red';
+//   dot.style.borderRadius = '50%';
+//   dot.style.zIndex = '9999';
+//   dot.style.pointerEvents = 'none';
+//   dot.style.boxShadow = '0 0 6px 2px rgba(255,0,0,0.6)';
+//   dot.className = 'debug-dot';
 
-  document.body.appendChild(dot);
+//   document.body.appendChild(dot);
 
-  // Remove after 2 seconds
-  setTimeout(() => {
-    dot.remove();
-  }, 2000);
-}
+//   // Remove after 2 seconds
+//   setTimeout(() => {
+//     dot.remove();
+//   }, 2000);
+// }
 
 
 // Function to determine background brightness at a specific Y position
@@ -71,7 +71,7 @@ const getBackgroundBehindNavbar = useCallback((navbarId = 'nav'): 'light' | 'dar
   console.log('Checking background at Y position:', y);
   const x = 10;
 
- showDebugDot(x, y);
+//  showDebugDot(x, y);
 
   let elem = document.elementFromPoint(x, y);
 
