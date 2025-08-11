@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 // app/components/Hero.tsx
 export default function Hero() {
   return (
-    <section className="bg-gradient-to-br from-primary to-primary-500 text-white py-20 px-6 text-center">
+    <section id="hero" className="bg-gradient-to-br from-primary to-primary-500 text-white py-20 px-6 text-center">
       <h1 className="text-4xl md:text-5xl font-bold mb-4">
         Reimagine Education: Learn, Play, and Earn with AI Tutors and Web3 Rewards
       </h1>

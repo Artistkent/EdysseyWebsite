@@ -6,7 +6,7 @@ export default function Footer() {
   
 
   return (
-    <footer className="relative  border-t border-white/50 text-white ">
+    <footer id="footer" className="relative  border-t border-white/50 text-white ">
       <div className=" z-50  py-12 pb-2 px-6">
       <div className="max-w-6xl mx-auto flex flex-col md:flex-row md:justify-between gap-8">
         {/* Left: Links */}

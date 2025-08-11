@@ -6,7 +6,7 @@ import Hero from './components/Hero';
 // import Benefits from './components/Benefits';
 import HowItWorks from './components/HowItWorks';
 import Perks from './components/Perks';
-import SneakPeek from './components/SneakPeek';
+
 import WhyItMatters from './components/WhyItMatters';
 import FAQ from './components/FAQ';
 import WaitlistCTA from './components/WaitlistCTA';
@@ -60,14 +60,7 @@ export default function Home() {
       <Perks />
        </motion.div>
 
-        <motion.div
-  initial={{ opacity: 0, y: 40 }}
-  whileInView={{ opacity: 1, y: 0 }}
-  transition={{ duration: 0.5, delay: 0.1 }}
-  viewport={{ once: true }}
->     
-      <SneakPeek />
-       </motion.div>
+   
 
         <motion.div
   initial={{ opacity: 0, y: 40 }}
