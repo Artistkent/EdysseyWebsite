@@ -369,7 +369,7 @@ useEffect(() => {
       className='navbarGroupClass transition-transform duration-300 transform hover:scale-110'
     />
 
-    EDDYSEY
+    EDYSSEY
          
         </a>
         </div>

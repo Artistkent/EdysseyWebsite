@@ -14,8 +14,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Eddysey",
-  description: "Eddysey: AI-Powered Learning Adventures",
+  title: "Edyssey",
+  description: "Edyssey: AI-Powered Learning Adventures",
 };
 
 export default function RootLayout({
