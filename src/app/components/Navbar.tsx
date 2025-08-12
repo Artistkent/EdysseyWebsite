@@ -20,15 +20,19 @@ export default function Navbar() {
   const [isDarkBg, setIsDarkBg] = useState(false);
   const [showFab, setShowFab] = useState(false);
   const [isScrolling, setIsScrolling] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
 
   const [heroInView, setHeroInView] = useState(false);
 const [footerInView, setFooterInView] = useState(false);
-const isDocked = heroInView || footerInView; // <-- dock when hero OR footer visible
+
 
 
   const fabRef = useRef<HTMLAnchorElement | null>(null);
 const [fabPos, setFabPos] = useState({ x: 0, y: 0 });  // pixels from top-left
 const [fabReady, setFabReady] = useState(false);
+
+
+
 
 useEffect(() => {
   let timeoutId: number | undefined;
@@ -57,32 +61,29 @@ const computeTargets = useCallback(() => {
   const linkRect = navLink.getBoundingClientRect();
   const fabRect = fabEl.getBoundingClientRect();
 
+  if (!linkRect.width || !linkRect.height) {
+  // nav link not measurable (e.g., hidden on mobile)
+  const margin = 20;
+  return {
+    dock: { x: 0, y: 0 }, // unused on mobile
+    float: { x: window.innerWidth - fabRect.width - margin,
+             y: window.innerHeight - fabRect.height - margin },
+  };
+}
+
   // Center FAB over the nav link
   const dockX = linkRect.left + (linkRect.width - fabRect.width) / 2;
   const dockY = linkRect.top + (linkRect.height - fabRect.height) / 2;
 
   // Bottom-right with a nice margin
-  const margin = 20;
+  const margin = 40;
   const floatX = window.innerWidth - fabRect.width - margin;
-  const floatY = window.innerHeight - fabRect.height - margin;
+  const floatY = window.innerHeight - fabRect.height - margin/2;
 
   return { dock: { x: dockX, y: dockY }, float: { x: floatX, y: floatY } };
 }, []);
 
 
-
-
-// Handle scroll event to change navbar style
-  useEffect(() => {
-  const handleScroll = () => {
-    const navbar = document.querySelector('nav');
-    const navbarHeight = navbar?.clientHeight || 0;
-    setScrolled(window.scrollY > (navbarHeight/3)); // Adjust threshold as needed
-  };
-
-  window.addEventListener('scroll', handleScroll);
-  return () => window.removeEventListener('scroll', handleScroll);
-}, []);
 
 // Show a debug dot at the specified coordinates
 
@@ -115,129 +116,146 @@ const getBackgroundBehindNavbar = useCallback((navbarId = 'nav'): 'light' | 'dar
   const navbar = document.getElementById(navbarId);
   if (!navbar) return 'light';
 
-  const navbarHeight = navbar?.clientHeight || 0;
-
   const rect = navbar.getBoundingClientRect();
-  const y = rect.bottom - (navbarHeight/2); // Just below the navbar
-  console.log('Checking background at Y position:', y);
-  const x = 10;
+  // sample just *below* the navbar so we don't hit the sticky element
+  const x = Math.min(rect.left + 10, window.innerWidth - 1);
+  const y = Math.min(rect.bottom + 1, window.innerHeight - 1);
 
-//  showDebugDot(x, y);
-
-  let elem = document.elementFromPoint(x, y);
-
-  // If the point returns the navbar itself (because it's sticky), we search deeper
-  while (elem && elem.classList.contains("navbarGroupClass")) {
-    const originalElem = elem as HTMLElement;
-    originalElem.style.pointerEvents = 'none';// Temporarily ignore the navbar
-    elem = document.elementFromPoint(x, y);
-    console.log('Found element at point:', elem);
-    originalElem.style.removeProperty('pointer-events');
-  }
-
+  const elem = document.elementFromPoint(x, y) as HTMLElement | null;
   if (!elem) return 'light';
 
-  const style = window.getComputedStyle(elem);
-  const bgColor = style.backgroundColor;
-  console.log('Background behind navbar:', bgColor);
+  const bg = getComputedStyle(elem).backgroundColor;
+  if (!bg || bg === 'transparent') return 'light';
 
-  if (!bgColor || bgColor === 'transparent') return 'light';
-
-  const rgb = bgColor.match(/\d+/g)?.map(Number);
+  const rgb = bg.match(/\d+/g)?.map(Number);
   if (!rgb || rgb.length < 3) return 'light';
 
   const brightness = (rgb[0] * 299 + rgb[1] * 587 + rgb[2] * 114) / 1000;
-  //  console.log('Calculated brightness:', brightness);
   return brightness > 151 ? 'light' : 'dark';
 }, []);
 
 
-// Check background brightness on scroll
-useEffect(() => {
-  const handleScroll = () => {
-    const brightness = getBackgroundBehindNavbar();
-    setIsDarkBg(brightness === 'dark');
-  };
-
-  window.addEventListener('scroll', handleScroll);
-  handleScroll(); // initial run
-  return () => window.removeEventListener('scroll', handleScroll);
-}, [getBackgroundBehindNavbar]);
 
 const triggerId = 'hero';
 
 
 
+
+//MOBILE CODES
+// Compute the floating position of the FAB
+useEffect(() => {
+  const mq = window.matchMedia('(max-width: 767px)'); // Tailwind md breakpoint
+  const update = () => setIsMobile(mq.matches);
+  update();
+  // Safari fallback for older addListener/removeListener
+  if (mq.addEventListener) {
+    mq.addEventListener('change', update);
+  } else {
+    mq.addListener(update);
+  }
+  return () => {
+    if (mq.removeEventListener) {
+      mq.removeEventListener('change', update);
+    } else {
+      mq.removeListener(update);
+    }
+  };
+}, []);
+
+
+// Compute the floating position of the FAB
+const computeFloat = useCallback(() => {
+  const el = fabRef.current;
+  if (!el) return { x: 0, y: 0 };
+  const r = el.getBoundingClientRect();
+  const margin = 20;
+  return {
+    x: window.innerWidth - r.width - margin,
+    y: window.innerHeight - r.height - margin,
+  };
+}, []);
+
+// Handle mobile FAB docking logic
+
 useLayoutEffect(() => {
-  // Mount FAB hidden, compute initial position (dock or float), then reveal.
   setShowFab(true);
 
+  // MOBILE: always float bottom-right; don't hide navbar link
+  if (isMobile) {
+    requestAnimationFrame(() => {
+      setFabPos(computeFloat());
+      const waitlistNav = document.getElementById('WaitlistCTAnavid');
+      if (waitlistNav) {
+        waitlistNav.style.visibility = 'visible';
+        waitlistNav.style.pointerEvents = 'auto';
+      }
+      setFabReady(true);
+    });
+    return; // <-- skip docking logic entirely
+  }
+
+  // DESKTOP: your existing docking placement...
   const place = () => {
     const targets = computeTargets();
     if (!targets) return;
-
     const triggerEl = document.getElementById(triggerId);
     const navH = document.getElementById('nav')?.clientHeight ?? 0;
-
-    let inView = true; // default
+    let inView = true;
     if (triggerEl) {
       const r = triggerEl.getBoundingClientRect();
       inView = r.top < window.innerHeight && r.bottom > navH;
     }
-
     setFabPos(inView ? targets.dock : targets.float);
-
-    // Hide the real nav link when docked (but keep layout!)
     const waitlistNav = document.getElementById('WaitlistCTAnavid');
     if (waitlistNav) {
-      waitlistNav.style.visibility = inView ? 'hidden' : 'visible';
+      waitlistNav.style.visibility = inView ? 'hidden' : 'hidden';
       waitlistNav.style.pointerEvents = inView ? 'none' : 'auto';
     }
-
     setFabReady(true);
   };
-
-  // Run once before first paint; if layout hasn’t settled, queue to next frame
   place();
   requestAnimationFrame(place);
-}, [computeTargets, triggerId]);
+}, [computeTargets, computeFloat, triggerId, isMobile]);
+
+
+// Handle desktop FAB docking logic
 
 useEffect(() => {
-  const navH = document.getElementById('nav')?.clientHeight ?? 0;
+  if (isMobile) return;
 
+  const navH = document.getElementById('nav')?.clientHeight ?? 0;
   const io = new IntersectionObserver(
     (entries) => {
+      let heroSeen = heroInView;   // fallback to current state
+      let footerSeen = footerInView;
+
       for (const entry of entries) {
         if (entry.target.id === 'hero') {
+          heroSeen = entry.isIntersecting;
           setHeroInView(entry.isIntersecting);
         } else if (entry.target.id === 'footer') {
+          footerSeen = entry.isIntersecting;
           setFooterInView(entry.isIntersecting);
         }
       }
 
-      // Ensure FAB is rendered, then measure next frame
+      const dockNow = heroSeen || footerSeen;
+
       setShowFab(true);
       requestAnimationFrame(() => {
         const targets = computeTargets();
         if (!targets) return;
 
-        // Hide the real nav link while docked (keep layout)
         const waitlistNav = document.getElementById('WaitlistCTAnavid');
         if (waitlistNav) {
-          const dock = heroInView || footerInView;
-          waitlistNav.style.visibility = dock ? 'hidden' : 'hidden';
-          waitlistNav.style.pointerEvents = dock ? 'none' : 'auto';
+          waitlistNav.style.visibility = 'hidden';
+          waitlistNav.style.pointerEvents = 'none';
         }
 
-        const dockNow = heroInView || footerInView;
         setFabPos(dockNow ? targets.dock : targets.float);
       });
     },
-    {
-      root: null,
-      rootMargin: `-${navH}px 0px 0px 0px`, // account for sticky nav at top
-      threshold: 0,
-    }
+    { root: null, rootMargin: `-${navH}px 0px 0px 0px`, threshold: 0 }
   );
 
   const heroEl = document.getElementById('hero');
@@ -246,23 +264,92 @@ useEffect(() => {
   if (footerEl) io.observe(footerEl);
 
   return () => io.disconnect();
-}, [computeTargets, heroInView, footerInView]);
+// eslint-disable-next-line react-hooks/exhaustive-deps
+}, [computeTargets, isMobile]);
 
 
 
+
+// Handle window resize
 
 useEffect(() => {
   const onResize = () => {
+    if (isMobile) {
+      setFabPos(computeFloat());
+      return;
+    }
     const targets = computeTargets();
     if (!targets) return;
-    setFabPos(isDocked ? targets.dock : targets.float);
+    const dockNow = heroInView || footerInView;
+    setFabPos(dockNow ? targets.dock : targets.float);
   };
 
   requestAnimationFrame(onResize);
   window.addEventListener('resize', onResize);
   return () => window.removeEventListener('resize', onResize);
-}, [computeTargets, isDocked]);
+}, [computeTargets, computeFloat, isMobile, heroInView, footerInView]);
 
+
+// Handle scroll events RAF
+
+useEffect(() => {
+  let rAF = 0;
+  let idleTimer: number | undefined;
+
+  // refs to avoid re-render thrash
+  const last = {
+    isScrolling: false,
+    scrolled: false,
+    isDark: false,
+  };
+
+  const measure = () => {
+    // 1) scrolled
+    const navbar = document.querySelector('nav') as HTMLElement | null;
+    const navbarHeight = navbar?.clientHeight || 0;
+    const nextScrolled = window.scrollY > (navbarHeight / 3);
+    if (nextScrolled !== last.scrolled) {
+      last.scrolled = nextScrolled;
+      setScrolled(nextScrolled);
+    }
+
+    // 2) background brightness (throttle this!)
+    const brightness = getBackgroundBehindNavbar(); // keep it, but see tip below to lighten it
+    const nextIsDark = brightness === 'dark';
+    if (nextIsDark !== last.isDark) {
+      last.isDark = nextIsDark;
+      setIsDarkBg(nextIsDark);
+    }
+
+    // 3) isScrolling glow flag (auto-clear after 160ms)
+    if (!last.isScrolling) {
+      last.isScrolling = true;
+      setIsScrolling(true);
+    }
+    if (idleTimer) window.clearTimeout(idleTimer);
+    idleTimer = window.setTimeout(() => {
+      last.isScrolling = false;
+      setIsScrolling(false);
+    }, 160);
+
+    rAF = 0; // finished
+  };
+
+  const onScroll = () => {
+    if (rAF) return;
+    rAF = requestAnimationFrame(measure);
+  };
+
+  window.addEventListener('scroll', onScroll, { passive: true });
+  // run once on mount
+  onScroll();
+
+  return () => {
+    window.removeEventListener('scroll', onScroll);
+    if (rAF) cancelAnimationFrame(rAF);
+    if (idleTimer) window.clearTimeout(idleTimer);
+  };
+}, [getBackgroundBehindNavbar]);
 
 
 
@@ -362,7 +449,7 @@ useEffect(() => {
     : { duration: 0 }
   }
   style={{ position: 'fixed', top: 0, left: 0, zIndex: 60, visibility: fabReady ? 'visible' : 'hidden' }}
-  className="shadow-lg backdrop-blur bg-black/80 hover:bg-black/70 navbarGroupClass px-4 py-1.5 md:px-6 md:py-3 rounded-full text-sm font-medium text-white hover:text-white/70 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/70"
+  className="shadow-lg backdrop-blur bg-black/80 hover:bg-black/70 navbarGroupClass px-4 py-1.5 md:px-6 md:py-3 rounded-full will-change-transform text-sm font-medium text-white hover:text-white/70 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/70"
   aria-label="Join Waitlist"
   id="WaitlistCTAnavidBottom"
 >
