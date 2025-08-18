@@ -29,31 +29,31 @@ export default function WaitlistCTA() {
 
   const handleSubmit = async (e: React.FormEvent) => {
   e.preventDefault();
+  if (form.botField) return; // honeypot
 
-  console.log(process.env.NEXT_PUBLIC_WAITLIST_WEBHOOK_URL);
-
-
-   if (form.botField) return;
+  const url = process.env.NEXT_PUBLIC_WAITLIST_WEBHOOK_URL!;
+  if (!url) {
+    alert('Config error: missing NEXT_PUBLIC_WAITLIST_WEBHOOK_URL');
+    return;
+  }
 
   try {
-    const res = await fetch('/api/waitlist', {
+    await fetch(url, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      mode: 'no-cors',                                // avoid CORS errors
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' }, // simple request (no preflight)
       body: JSON.stringify(form),
     });
 
-    const out = await res.json();
-    if (res.ok && out.ok) {
-      alert('✅ Success! You’re on the waitlist.');
-      setForm({ email:'', name:'', role:'', interests:[], earlyAccess:false, botField:'' });
-    } else {
-      alert('⚠️ ' + (out.message || 'Error'));
-    }
+    // Can't read response in no-cors; assume success for UX:
+    alert('✅ Success! You’re on the waitlist.');
+    setForm({ email:'', name:'', role:'', interests:[], earlyAccess:false, botField:'' });
   } catch (err) {
-    console.error('Waitlist API error:', err);
-    alert('Server error. Please try again.');
+    console.error(err);
+    alert('Network error—please try again.');
   }
 };
+
 
 
   const interestOptions = [

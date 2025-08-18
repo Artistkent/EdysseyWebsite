@@ -7,23 +7,52 @@ permissions:
   checks: write
   contents: read
   pull-requests: write
+concurrency:
+  group: deploy-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
-  build_and_preview:
-    if: ${{ github.event.pull_request.head.repo.full_name == github.repository }}
+  build_and_deploy:
     runs-on: ubuntu-latest
+
     steps:
       - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: package-lock.json
+
+      # Use a PUBLIC env var for static export direct-to-GAS:
       - name: Create .env.local
         run: |
           cat > .env.local << 'EOF'
-          WAITLIST_WEBHOOK_URL=${{ secrets.WAITLIST_WEBHOOK_URL }}
+          NEXT_PUBLIC_WAITLIST_WEBHOOK_URL=${{ secrets.WAITLIST_WEBHOOK_URL }}
           EOF
+
+      - name: Restore Next.js cache
+        uses: actions/cache/restore@v4
+        with:
+          path: .next/cache
+          key: next-cache-${{ runner.os }}-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            next-cache-${{ runner.os }}-
+
       - run: npm ci
-      - run: npm run build 
+      - run: npm run build && npx next export
+
+      - name: Save Next.js cache
+        uses: actions/cache/save@v4
+        with:
+          path: .next/cache
+          key: next-cache-${{ runner.os }}-${{ hashFiles('**/package-lock.json') }}-${{ github.run_id }}
+
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: ${{ secrets.GITHUB_TOKEN }}
           firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_EDYSSEY_B372D }}
+          channelId: live
           projectId: edyssey-b372d
         env:
           FIREBASE_CLI_EXPERIMENTS: webframeworks
