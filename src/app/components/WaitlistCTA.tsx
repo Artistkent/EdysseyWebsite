@@ -14,6 +14,7 @@ export default function WaitlistCTA() {
   role: "",
   interests: [] as string[],
   earlyAccess: false, // NEW
+  botField: "" // honeypot
 });
 
 
@@ -26,11 +27,34 @@ export default function WaitlistCTA() {
     });
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    console.log('Form submitted:', form);
-    // You can POST this to your /api/join or external service
-  };
+  const handleSubmit = async (e: React.FormEvent) => {
+  e.preventDefault();
+
+  console.log(process.env.NEXT_PUBLIC_WAITLIST_WEBHOOK_URL);
+
+
+   if (form.botField) return;
+
+  try {
+    const res = await fetch('/api/waitlist', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(form),
+    });
+
+    const out = await res.json();
+    if (res.ok && out.ok) {
+      alert('✅ Success! You’re on the waitlist.');
+      setForm({ email:'', name:'', role:'', interests:[], earlyAccess:false, botField:'' });
+    } else {
+      alert('⚠️ ' + (out.message || 'Error'));
+    }
+  } catch (err) {
+    console.error('Waitlist API error:', err);
+    alert('Server error. Please try again.');
+  }
+};
+
 
   const interestOptions = [
     'Programming',
@@ -65,11 +89,11 @@ initial={{ opacity: 0, y: 40 }}
   viewport={{ once: true }}
   className=""
 >
-  <div className="lightChild relative max-w-xl mx-auto bg-black text-white-900 p-8 rounded-2xl shadow-md border border-gray-500 z-50 ">
+  <div className="lightChild relative max-w-xl mx-auto bg-black text-white p-8 rounded-2xl shadow-md border border-gray-500 z-50 ">
         <h2 className="text-xl font-semibold mb-2 text-center">
           Be among the first to experience our AI-powered learning platform.
         </h2>
-        <p className="text-sm text-white-600 mb-6 text-center">
+        <p className="text-sm text-white/60 mb-6 text-center">
           Get early access to exclusive features and updates.
         </p>
 
@@ -99,7 +123,7 @@ initial={{ opacity: 0, y: 40 }}
       type="text"
       value={form.name}
       onChange={(e) => setForm({ ...form, name: e.target.value })}
-      className="w-full border border-gray-300 rounded-md px-4 py-2 text-sm focus:outline-none"
+      className="w-full border border-gray-300 rounded-md px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
       placeholder="Enter your name"
       id="name"
     />
@@ -167,6 +191,22 @@ initial={{ opacity: 0, y: 40 }}
     <span className="absolute left-0.5 top-0.5 h-5 w-5 rounded-full bg-white shadow transition-transform peer-checked:translate-x-5" />
   </label>
 </div>
+
+{/* Honeypot (spam trap) */}
+<div className="hidden">
+  <label>
+    Leave this field empty
+    <input
+      type="text"
+      name="botField"
+      value={form.botField}
+      onChange={(e) => setForm({ ...form, botField: e.target.value })}
+      tabIndex={-1}
+      autoComplete="off"
+    />
+  </label>
+</div>
+
 
   {/* Submit */}
   <button
