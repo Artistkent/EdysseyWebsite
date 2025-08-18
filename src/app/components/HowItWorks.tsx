@@ -47,9 +47,9 @@ const defaultSteps: Step[] = [
 export default function HowItWorks({ steps = defaultSteps }: Props) {
   return (
     <section id="about" className="bg-white py-20 px-6">
-      <div className="max-w-5xl mx-auto">
+      <div className="max-w-7xl mx-auto">
         <h2 className="text-3xl md:text-4xl font-bold text-center mb-14 text-gray-900">
-          How Edyssey Works (Even Before It Fully Launches)
+          How Edyssey Works 
         </h2>
 
         <div className="grid md:grid-cols-4 gap-8">
