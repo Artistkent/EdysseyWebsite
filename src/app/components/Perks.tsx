@@ -1,5 +1,7 @@
 // app/components/Perks.tsx
 
+import Image from "next/image";
+
 const perks = [
   "Free access to our MVP platform",
   "Be the first to shape how quests, rewards, and tutors evolve",
@@ -11,7 +13,21 @@ const perks = [
 
 export default function Perks() {
   return (
-    <section className="bg-gradient-to-b from-purple-800 to-indigo-900 text-white py-20 px-6">
+    <section className="relative text-white py-20 px-6">
+
+{/* Background image with gradient mask */}
+      <div className="absolute inset-0 -z-10">
+        <Image
+          src="/images/perksback.png"
+          alt="Perks background"
+          fill
+          priority
+          className="object-cover opacity-100"
+        />
+        {/* Gradient overlay for fade effect */}
+        <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent" />
+      </div>
+
       <div className="max-w-4xl mx-auto text-center">
         <h2 className="text-3xl md:text-4xl font-bold mb-10">
           Get More Than Just Access

@@ -355,7 +355,7 @@ useEffect(() => {
 
   return (
     <>
-    <nav id='nav' className="navbarGroupClass sticky top-0 z-50  backdrop-blur border-b border-white/20">
+    <nav id='nav' className="navbarGroupClass sticky top-0 z-50  backdrop-blur ">
       <div className="navbarGroupClass max-w-6xl mx-auto px-4 py-1 flex justify-between items-center">
         {/* Brand */}
         <div className=' navbarGroupClass flex items-center  rounded-full'>
@@ -368,9 +368,7 @@ useEffect(() => {
       alt="logo"
       className='navbarGroupClass transition-transform duration-300 transform hover:scale-110'
     />
-
     EDYSSEY
-         
         </a>
         </div>
 

@@ -1,5 +1,7 @@
 // app/components/WhyItMatters.tsx
 
+import Image from "next/image";
+
 const values = [
   {
     title: "AI Tutors with Cultural Identity",
@@ -29,7 +31,21 @@ const values = [
 
 export default function WhyItMatters() {
   return (
-    <section className="bg-indigo-950 text-white py-20 px-6">
+    <section className=" text-white py-20 px-6 relative">
+
+{/* Background image with gradient mask */}
+      <div className="absolute inset-0 -z-10">
+        <Image
+          src="/images/whyitmattersback.png"
+          alt="Perks background"
+          fill
+          priority
+          className="object-cover opacity-100"
+        />
+        {/* Gradient overlay for fade effect */}
+        <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent" />
+      </div>
+
       <div className="max-w-7xl mx-auto">
         <h2 className="text-3xl md:text-4xl font-bold text-center mb-14">
           Why Edyssey is More Than an App — It&apos;s a Cultural, Educational, and Economic Shift

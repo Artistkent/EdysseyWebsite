@@ -1,9 +1,27 @@
 import { motion } from "framer-motion";
+import Image from "next/image";
+import LogosMarquee from "./LogosMarquee";
 
 // app/components/Hero.tsx
 export default function Hero() {
   return (
-    <section id="hero" className="bg-gradient-to-br from-primary to-primary-500 text-white py-20 px-6 text-center">
+    <section id="hero" className="relative text-white py-20 px-0 pb-4 text-center">
+
+      <div className="px-6">
+
+{/* Background image with gradient mask */}
+      <div className="absolute inset-0 -z-50">
+        <Image
+          src="/images/hero.png" // replace with your file path (e.g. /hero-bg.png in public folder)
+          alt="Hero background"
+          fill
+          priority
+          className="object-cover opacity-100"
+        />
+        {/* Gradient overlay for fade effect */}
+        <div className="absolute inset-0 bg-gradient-to-t from-black/10 via-black/40 to-transparent" />
+      </div>
+
       <h1 className="text-4xl md:text-5xl font-bold mb-4">
         Reimagine Education: Learn, Play, and Earn with AI Tutors and Web3 Rewards
       </h1>
@@ -15,29 +33,24 @@ export default function Hero() {
   href="#WaitlistCTA"
   whileHover={{ scale: 1.05 }}
   whileTap={{ scale: 0.95 }} 
-  className="bg-secondary text-white font-semibold py-3 px-6 rounded-full hover:bg-primary transition">
+  className="bg-primary text-white font-semibold text-base py-2 px-4 rounded-full hover:bg-primary/80 transition">
           Join the Waitlist for Early Access
         </motion.a>
         <motion.a
   href="#about"
   whileHover={{ scale: 1.05 }}
-  whileTap={{ scale: 0.95 }}  className="border border-white py-3 px-6 rounded-full hover:bg-white hover:text-black transition">
+  whileTap={{ scale: 0.95 }}  className="border border-white py-2 px-4 font-semibold text-base rounded-full hover:bg-white hover:text-black transition">
           See How It Works
         </motion.a>
       </div>
-      {/* Placeholder visual */}
-      <div className="mt-12">
-        <div className="w-full max-w-xl mx-auto h-64 bg-white/10 border border-white/20 rounded-xl flex items-center justify-center">
-        <motion.div
-  initial={{ opacity: 0 }}
-  animate={{ opacity: 1 }}
-  transition={{ duration: 1.5 }}
-  className="w-full max-w-xl mx-auto h-64 bg-white/10 border border-white/20 rounded-xl flex items-center justify-center"
->
-          <span className="text-white text-xl">[Animated Preview Placeholder]</span>
-          </motion.div>
-        </div>
+
       </div>
+
+{/* Placeholder visual */}
+      <div className="mt-50">
+        <LogosMarquee />
+      </div>
+
     </section>
   );
 }
