@@ -58,9 +58,7 @@ export default function LogosMarquee() {
         ))}
       </Splide>
 
-      {/* Edge blur overlays */}
-      <div className="pointer-events-none absolute left-0 top-0 h-full w-24 bg-gradient-to-r from-gray-900/70 to-transparent backdrop-blur-sm z-20" />
-      <div className="pointer-events-none absolute right-0 top-0 h-full w-24 bg-gradient-to-l from-gray-900/70 to-transparent backdrop-blur-sm z-20" />
+     
     </div>
   );
 }

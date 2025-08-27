@@ -12,20 +12,20 @@ export default function WaitlistCTA() {
   email: "",
   name: "",
   role: "",
-  interests: [] as string[],
+  // interests: [] as string[],
   earlyAccess: false, // NEW
   botField: "" // honeypot
 });
 
 
-  const handleCheckboxChange = (value: string) => {
-    setForm((prev) => {
-      const interests = prev.interests.includes(value)
-        ? prev.interests.filter((v) => v !== value)
-        : [...prev.interests, value];
-      return { ...prev, interests };
-    });
-  };
+  // const handleCheckboxChange = (value: string) => {
+  //   setForm((prev) => {
+  //     const interests = prev.interests.includes(value)
+  //       ? prev.interests.filter((v) => v !== value)
+  //       : [...prev.interests, value];
+  //     return { ...prev, interests };
+  //   });
+  // };
 
   const handleSubmit = async (e: React.FormEvent) => {
   e.preventDefault();
@@ -47,7 +47,7 @@ export default function WaitlistCTA() {
 
     // Can't read response in no-cors; assume success for UX:
     alert('✅ Success! You’re on the waitlist.');
-    setForm({ email:'', name:'', role:'', interests:[], earlyAccess:false, botField:'' });
+    setForm({ email:'', name:'', role:'', earlyAccess:false, botField:'' });
   } catch (err) {
     console.error(err);
     alert('Network error—please try again.');
@@ -56,14 +56,14 @@ export default function WaitlistCTA() {
 
 
 
-  const interestOptions = [
-    'Programming',
-    'Data Science',
-    'AI/ML',
-    'Design',
-    'Business',
-    'Languages',
-  ];
+  // const interestOptions = [
+  //   'Programming',
+  //   'Data Science',
+  //   'AI/ML',
+  //   'Design',
+  //   'Business',
+  //   'Languages',
+  // ];
 
 
   return (
@@ -152,7 +152,7 @@ initial={{ opacity: 0, y: 40 }}
   </div>
 
   {/* Interests */}
-  <div className="flex flex-row">
+  {/* <div className="flex flex-row">
     <label className="block text-sm font-medium mb-2 w-24 p-2">
       Areas of Interest (Optional)
     </label>
@@ -169,7 +169,7 @@ initial={{ opacity: 0, y: 40 }}
         </label>
       ))}
     </div>
-  </div>
+  </div> */}
 
   {/* Early access toggle */}
 <div className="flex items-center justify-between gap-3">
