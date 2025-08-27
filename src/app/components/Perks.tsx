@@ -13,7 +13,7 @@ const perks = [
 
 export default function Perks() {
   return (
-    <section className="relative text-white py-20 px-6">
+    <section id="perks" className="relative text-white py-20 px-6">
 
 {/* Background image with gradient mask */}
       <div className="absolute inset-0 -z-10">
